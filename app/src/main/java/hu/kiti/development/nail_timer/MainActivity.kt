@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @OnClick(R.id.create_program_button)
-   internal fun onCreateProgramButtonClicked() {
+    internal fun onCreateProgramButtonClicked() {
         val intent = Intent(this, ProgramActivity::class.java)
         startActivity(intent)
     }
