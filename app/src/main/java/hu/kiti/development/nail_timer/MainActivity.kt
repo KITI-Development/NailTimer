@@ -1,14 +1,18 @@
 package hu.kiti.development.nail_timer
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import butterknife.ButterKnife
+import butterknife.OnClick
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        ButterKnife.bind(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -25,5 +29,11 @@ class MainActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @OnClick(R.id.create_program_button)
+   internal fun onCreateProgramButtonClicked() {
+        val intent = Intent(this, ProgramActivity::class.java)
+        startActivity(intent)
     }
 }
