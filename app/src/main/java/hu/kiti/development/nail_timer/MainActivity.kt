@@ -5,14 +5,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
-import butterknife.OnClick
+import hu.kiti.development.nail_timer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.createProgramButton.setOnClickListener { onCreateProgramButtonClicked() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -31,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    @OnClick(R.id.create_program_button)
     internal fun onCreateProgramButtonClicked() {
         val intent = Intent(this, ProgramActivity::class.java)
         startActivity(intent)

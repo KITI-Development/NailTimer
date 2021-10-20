@@ -3,21 +3,17 @@ package hu.kiti.development.nail_timer
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import hu.kiti.development.nail_timer.databinding.ActivityProgramBinding
 
 class ProgramActivity : AppCompatActivity() {
 
-    @BindView(R.id.program_name_edit_text)
-    lateinit var programNameEditText: EditText
+    private lateinit var binding: ActivityProgramBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_program)
-        ButterKnife.bind(this)
+        binding = ActivityProgramBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //actionbar
         val actionbar = supportActionBar
@@ -27,7 +23,9 @@ class ProgramActivity : AppCompatActivity() {
         actionbar.setDisplayHomeAsUpEnabled(true)
         actionbar.setDisplayHomeAsUpEnabled(true)
 
-        programNameEditText.setSelection(programNameEditText.text.toString().length)
+        binding.programNameEditText.setSelection(binding.programNameEditText.text.toString().length)
+
+        binding.addLayerButton.setOnClickListener { onAddLayerButtonClicked() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,8 +46,7 @@ class ProgramActivity : AppCompatActivity() {
         return true
     }
 
-    @OnClick(R.id.add_layer_button)
     internal fun onAddLayerButtonClicked() {
-        LayerDialog().getInstance()?.show(supportFragmentManager, "layer")
+        LayerDialog().getInstance().show(supportFragmentManager, "layer")
     }
 }
