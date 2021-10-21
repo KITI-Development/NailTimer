@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import hu.kiti.development.nail_timer.databinding.ActivityProgramBinding
+import hu.kiti.development.nail_timer.models.Layer
 
 class ProgramActivity : AppCompatActivity() {
 
@@ -47,6 +48,7 @@ class ProgramActivity : AppCompatActivity() {
     }
 
     internal fun onAddLayerButtonClicked() {
-        LayerDialog().getInstance().show(supportFragmentManager, "layer")
+        var layer  = Layer()
+        LayerDialog().getInstance(layer).show(supportFragmentManager, "layer")
     }
 }
