@@ -5,11 +5,16 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import hu.kiti.development.nail_timer.databinding.ActivityProgramBinding
+import hu.kiti.development.nail_timer.db.AppDatabase
 import hu.kiti.development.nail_timer.models.Layer
+import hu.kiti.development.nail_timer.models.Program
+import hu.kiti.development.nail_timer.util.CommonUtil
 
 class ProgramActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProgramBinding
+
+    private lateinit var program: Program
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,13 @@ class ProgramActivity : AppCompatActivity() {
         binding.programNameEditText.setSelection(binding.programNameEditText.text.toString().length)
 
         binding.addLayerButton.setOnClickListener { onAddLayerButtonClicked() }
+
+        val programId = intent.getLongExtra(KEY_PROGRAM_ID, -1L);
+        if (programId == -1L) {
+            program = Program(CommonUtil.generateId())
+        } else {
+            program = AppDatabase.getInstance(this).programDao().getProgram(programId)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,7 +60,11 @@ class ProgramActivity : AppCompatActivity() {
     }
 
     internal fun onAddLayerButtonClicked() {
-        var layer  = Layer()
+        var layer = Layer(CommonUtil.generateId())
         LayerDialog().getInstance(layer).show(supportFragmentManager, "layer")
+    }
+
+    companion object {
+        public const val KEY_PROGRAM_ID = "program_id"
     }
 }
