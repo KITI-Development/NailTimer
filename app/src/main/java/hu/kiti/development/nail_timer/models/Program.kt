@@ -1,12 +1,15 @@
 package hu.kiti.development.nail_timer.models
 
 import androidx.annotation.Keep
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Keep
-class Program {
+@Entity
+class Program(
+    @PrimaryKey
+    val id: Long
+) {
 
-    var id: Long = 0
     var name: String = ""
-    var layers: List<Layer> = emptyList();
-
 }
