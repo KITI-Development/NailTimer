@@ -48,8 +48,13 @@ class ProgramActivity : AppCompatActivity() {
             program = Program(CommonUtil.generateId())
             binding.programNameEditText.setText("My Program")
         } else {
-            program = AppDatabase.getInstance(this).programDao().getProgram(programId)
-            binding.programNameEditText.setText(program.name)
+            scope.async {
+                program =
+                    AppDatabase.getInstance(this@ProgramActivity).programDao().getProgram(programId)
+                withContext(Dispatchers.Main) {
+                    binding.programNameEditText.setText(program.name)
+                }
+            }
         }
 
         binding.programNameEditText.addTextChangedListener(object : TextWatcher {
@@ -103,12 +108,14 @@ class ProgramActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@ProgramActivity, "Program is saved.", Toast.LENGTH_SHORT)
                         .show()
+                    finish()
                 }
             } else {
                 AppDatabase.getInstance(this@ProgramActivity).programDao().updateProgram(program)
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@ProgramActivity, "Program is updated.", Toast.LENGTH_SHORT)
                         .show()
+                    finish()
                 }
             }
         }

@@ -1,10 +1,12 @@
 package hu.kiti.development.nail_timer.ui.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.kiti.development.nail_timer.databinding.ItemProgramBinding
 import hu.kiti.development.nail_timer.models.Program
+import hu.kiti.development.nail_timer.util.Navigator
 
 class ProgramAdapter(private var programs: List<Program>) :
     RecyclerView.Adapter<ProgramAdapter.ProgramViewHolder>() {
@@ -31,9 +33,15 @@ class ProgramAdapter(private var programs: List<Program>) :
 
     class ProgramViewHolder(private val binding: ItemProgramBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(program: Program) {
             binding.programIdTextView.text = program.id.toString()
             binding.programNameTextView.text = program.name
+            binding.root.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    Navigator.openProgram(binding.root.context, program.id)
+                }
+            })
         }
     }
 }
