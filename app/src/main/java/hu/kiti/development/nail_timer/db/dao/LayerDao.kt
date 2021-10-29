@@ -17,6 +17,6 @@ interface LayerDao {
     fun deleteLayer(layer: Layer)
 
     @Query("SELECT * FROM layer WHERE layer.programId == :programId AND layer.id == :layerId")
-    fun getLayer(programId: Long, layerId: Int): Layer
+    fun getLayer(programId: Long, layerId: Long): Layer
     
 }
