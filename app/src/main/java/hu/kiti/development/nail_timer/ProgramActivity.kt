@@ -1,20 +1,28 @@
 package hu.kiti.development.nail_timer
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import hu.kiti.development.nail_timer.databinding.ActivityProgramBinding
 import hu.kiti.development.nail_timer.db.AppDatabase
 import hu.kiti.development.nail_timer.models.Layer
 import hu.kiti.development.nail_timer.models.Program
 import hu.kiti.development.nail_timer.util.CommonUtil
+import kotlinx.coroutines.*
 
 class ProgramActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProgramBinding
 
     private lateinit var program: Program
+
+    private var isNew: Boolean = false
+
+    val scope = CoroutineScope(Job() + Dispatchers.Default)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +43,32 @@ class ProgramActivity : AppCompatActivity() {
 
         val programId = intent.getLongExtra(KEY_PROGRAM_ID, -1L);
         if (programId == -1L) {
+            isNew = true
             program = Program(CommonUtil.generateId())
+            binding.programNameEditText.setText("My Program")
         } else {
             program = AppDatabase.getInstance(this).programDao().getProgram(programId)
+            binding.programNameEditText.setText(program.name)
         }
+
+        binding.programNameEditText.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                program.name = editable.toString()
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,6 +79,7 @@ class ProgramActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.getItemId()
         if (id == R.id.menu_save) {
+            saveProgram()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -59,9 +90,27 @@ class ProgramActivity : AppCompatActivity() {
         return true
     }
 
-    internal fun onAddLayerButtonClicked() {
+    private fun onAddLayerButtonClicked() {
         var layer = Layer(CommonUtil.generateId())
         LayerDialog().getInstance(layer).show(supportFragmentManager, "layer")
+    }
+
+    private fun saveProgram() {
+        scope.async {
+            if (isNew) {
+                AppDatabase.getInstance(this@ProgramActivity).programDao().insertProgram(program)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ProgramActivity, "Program is saved.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                AppDatabase.getInstance(this@ProgramActivity).programDao().updateProgram(program)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ProgramActivity, "Program is updated.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
     }
 
     companion object {
