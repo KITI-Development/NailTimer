@@ -13,6 +13,9 @@ interface ProgramDao {
     @Query("SELECT * FROM program WHERE program.id == :programId")
     fun getProgram(programId: Long): Program
 
+    @Query("SELECT * FROM program")
+    fun getPrograms(): List<Program>
+
     @Insert
     fun insertProgram(vararg program: Program)
 
