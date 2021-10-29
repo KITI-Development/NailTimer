@@ -10,6 +10,7 @@ import hu.kiti.development.nail_timer.R
 import hu.kiti.development.nail_timer.databinding.ActivityMainBinding
 import hu.kiti.development.nail_timer.db.AppDatabase
 import hu.kiti.development.nail_timer.ui.ProgramActivity
+import hu.kiti.development.nail_timer.util.Navigator
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         listPrograms()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,8 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onCreateProgramButtonClicked() {
-        val intent = Intent(this, ProgramActivity::class.java)
-        startActivity(intent)
+        Navigator.openProgram(this)
     }
 
     private fun listPrograms() {
