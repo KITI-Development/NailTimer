@@ -13,6 +13,7 @@ import hu.kiti.development.nail_timer.db.AppDatabase
 import hu.kiti.development.nail_timer.models.Layer
 import hu.kiti.development.nail_timer.models.Program
 import hu.kiti.development.nail_timer.util.CommonUtil
+import hu.kiti.development.nail_timer.util.Constants
 import kotlinx.coroutines.*
 
 class ProgramActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class ProgramActivity : AppCompatActivity() {
 
     private var isNew: Boolean = false
 
-    val scope = CoroutineScope(Job() + Dispatchers.Default)
+    private val scope = CoroutineScope(Job() + Dispatchers.Default)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,24 +40,6 @@ class ProgramActivity : AppCompatActivity() {
         actionbar.setDisplayHomeAsUpEnabled(true)
 
         binding.programNameEditText.setSelection(binding.programNameEditText.text.toString().length)
-
-        binding.addLayerButton.setOnClickListener { onAddLayerButtonClicked() }
-
-        val programId = intent.getLongExtra(KEY_PROGRAM_ID, -1L);
-        if (programId == -1L) {
-            isNew = true
-            program = Program(CommonUtil.generateId())
-            binding.programNameEditText.setText("My Program")
-        } else {
-            scope.async {
-                program =
-                    AppDatabase.getInstance(this@ProgramActivity).programDao().getProgram(programId)
-                withContext(Dispatchers.Main) {
-                    binding.programNameEditText.setText(program.name)
-                }
-            }
-        }
-
         binding.programNameEditText.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(editable: Editable) {
@@ -75,6 +58,23 @@ class ProgramActivity : AppCompatActivity() {
             ) {
             }
         })
+
+        binding.addLayerButton.setOnClickListener { onAddLayerButtonClicked() }
+
+        val programId = intent.getLongExtra(Constants.KEY_PROGRAM_ID, -1L);
+        if (programId == -1L) {
+            isNew = true
+            program = Program(CommonUtil.generateId())
+            binding.programNameEditText.setText("My Program")
+        } else {
+            scope.async {
+                program =
+                    AppDatabase.getInstance(this@ProgramActivity).programDao().getProgram(programId)
+                withContext(Dispatchers.Main) {
+                    binding.programNameEditText.setText(program.name)
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -97,8 +97,7 @@ class ProgramActivity : AppCompatActivity() {
     }
 
     private fun onAddLayerButtonClicked() {
-        var layer = Layer(CommonUtil.generateId())
-        LayerDialog().getInstance(layer).show(supportFragmentManager, "layer")
+        LayerDialog().getInstance(program.id, -1L).show(supportFragmentManager, "layer")
     }
 
     private fun saveProgram() {
@@ -119,9 +118,5 @@ class ProgramActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    companion object {
-        public const val KEY_PROGRAM_ID = "program_id"
     }
 }

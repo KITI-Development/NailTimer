@@ -20,6 +20,7 @@
             android:textSize="16sp" />
 
         <EditText
+            android:id="@+id/coat_name_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"

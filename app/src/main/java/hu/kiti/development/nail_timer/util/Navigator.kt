@@ -12,7 +12,7 @@ object Navigator {
 
     fun openProgram(context: Context, programId: Long) {
         val intent = Intent(context, ProgramActivity::class.java)
-        intent.putExtra(ProgramActivity.KEY_PROGRAM_ID, programId)
+        intent.putExtra(Constants.KEY_PROGRAM_ID, programId)
         context.startActivity(intent)
     }
 }
