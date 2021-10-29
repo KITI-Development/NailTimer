@@ -1,4 +1,4 @@
-package hu.kiti.development.nail_timer
+package hu.kiti.development.nail_timer.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

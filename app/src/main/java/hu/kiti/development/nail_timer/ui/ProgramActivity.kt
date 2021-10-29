@@ -1,4 +1,4 @@
-package hu.kiti.development.nail_timer
+package hu.kiti.development.nail_timer.ui
 
 import android.os.Bundle
 import android.text.Editable
@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import hu.kiti.development.nail_timer.R
 import hu.kiti.development.nail_timer.databinding.ActivityProgramBinding
 import hu.kiti.development.nail_timer.db.AppDatabase
 import hu.kiti.development.nail_timer.models.Layer
